@@ -1,0 +1,69 @@
+#!/bin/bash
+echo "Creating ~/.vimrc"
+
+echo "
+execute pathogen#infect()
+
+let mapleader=','
+set number
+syntax on
+:imap jk <Esc>
+:imap <C-L> <Esc>
+set t_Co=256
+set background=dark
+let g:solarized_termtrans=1
+colorscheme onehalfdark
+let g:airline_theme='onehalfdark'
+set wildmenu
+set showcmd
+
+set cursorline
+
+set incsearch
+set hlsearch
+nnoremap <leader><space> :nohlsearch<CR>
+
+:set noexpandtab
+:set copyindent
+:set preserveindent
+:set softtabstop=0
+:set shiftwidth=4
+:set tabstop=4
+:set autoindent
+:set noswapfile
+filetype plugin indent on
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:airline#extensions#tabline#enabled = 1
+map <C-c> :bd<cr>
+
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+map <C-n> :NERDTreeFocus<CR>
+map <C-m> :NERDTreeToggle<CR>
+" > ~/.vimrc
+
+echo "Done creating ~/.vimrc"
+
+read -p "Press [Enter] to set up vim plugins and directories, or CTRL-C to exit."
+
+mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+curl -LSso ~/.vim/autoload/onehalfdark.vim https://raw.githubusercontent.com/sonph/onehalf/master/vim/autoload/airline/themes/onehalfdark.vim
+cd ~/.vim/bundle
+git clone git://github.com/tpope/vim-unimpaired.git
+git clone git://github.com/tpope/vim-sensible.git
+git clone https://github.com/vim-airline/vim-airline bundle/vim-airline
+git clone https://github.com/kien/ctrlp.vim.git bundle/ctrlp.vim
+git clone https://github.com/scrooloose/nerdtree.git bundle/nerdtree
+wget http://www.vim.org/scripts/download_script.php?src_id=10873
+mv download_script.php?src_id=10873 autoclose.vim
+mkdir ~/.vim/colors
+cd  ~/.vim/colors
+wget https://raw.githubusercontent.com/sonph/onehalf/master/vim/colors/onehalfdark.vim
+# TERM might need to be set xterm-256color, depending on the environment
+echo export TERM=screen-256color >> ~/.bashrc
+source ~/.bashrc
